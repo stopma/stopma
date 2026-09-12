@@ -1,0 +1,189 @@
+/* Public-facing polish only. Admin controls keep their existing styles. */
+body:has(.hero) .header {
+  max-width: 960px;
+  padding: 14px 24px;
+  min-height: 66px;
+  gap: 20px;
+}
+.hero {
+  max-width: 688px;
+  margin-top: 18px;
+}
+.hero h1 {
+  font-size: clamp(34px, 4.5vw, 50px);
+  line-height: 1.3;
+  margin: 6px 0 10px;
+  letter-spacing: -1.2px;
+}
+.hero .intro {
+  margin: 0 0 14px;
+  color: #666;
+  font-size: 16px;
+}
+.composer textarea {
+  height: 88px;
+  min-height: 88px;
+  padding: 14px 18px 10px;
+  border-color: #d6d6d6;
+  border-radius: 14px 14px 0 0;
+  text-align: start;
+}
+.composer textarea::placeholder { color: #777; }
+.composer textarea:focus-visible {
+  outline: none;
+  border-color: var(--red);
+  box-shadow: 0 -2px 0 0 var(--red), 2px 0 0 0 var(--red), -2px 0 0 0 var(--red);
+}
+.composer-bottom {
+  padding: 8px 14px 12px;
+  border-color: #d6d6d6;
+  border-radius: 0 0 14px 14px;
+  background: #fafafa;
+}
+.composer:has(textarea:focus-visible) .composer-bottom {
+  border-color: var(--red);
+  box-shadow: 0 2px 0 0 var(--red), 2px 0 0 0 var(--red), -2px 0 0 0 var(--red);
+}
+.composer-bottom button {
+  min-width: 150px;
+  min-height: 46px;
+  justify-content: space-between;
+  gap: 20px;
+  border-radius: 8px;
+}
+.composer .counter {
+  color: #666;
+  padding-left: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.composer .form-note { margin-top: 8px; color: #666; }
+.composer .success { color: #333; background: #f4f4f4; }
+.popular {
+  max-width: 960px;
+  margin-top: 20px;
+}
+.section-heading { gap: 12px; margin-bottom: 10px; }
+.section-heading > span { color: #666; flex-shrink: 0; }
+.cards { gap: 18px; align-items: stretch; grid-auto-rows: 1fr; }
+.stop-card {
+  min-width: 0;
+  border-color: #e2e2e2;
+  border-radius: 14px;
+  padding: 22px 24px 18px;
+}
+.stop-card .category {
+  padding: 2px 8px;
+  font-size: 11px;
+  line-height: 1.7;
+  border: 1px solid #eee;
+  background: #fafafa;
+  color: #666;
+}
+.stop-text {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.75;
+  margin: 12px 0 18px;
+}
+.stop-card .stop-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  flex: 0 0 auto;
+  width: 100%;
+  height: 5.25em;
+}
+.stop-card .vote-wrap {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #ededed;
+  gap: 10px;
+}
+.stop-card .vote, .detail .vote {
+  min-height: 44px;
+  padding: 8px 14px;
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+  border-radius: 8px;
+}
+.stop-card .vote:hover:not(:disabled), .detail .vote:hover:not(:disabled) {
+  background: #be2027;
+  border-color: #be2027;
+  color: #fff;
+  filter: none;
+}
+.stop-card .vote[aria-pressed="true"], .detail .vote[aria-pressed="true"] {
+  color: #555;
+  background: #f4f4f4;
+  border-color: #ddd;
+  opacity: 1;
+}
+.support { color: #666; white-space: nowrap; }
+.support strong { font-size: 25px; font-weight: 800; color: #202020; font-variant-numeric: tabular-nums; }
+.popular .empty { padding: 22px 24px; border-style: solid; background: #fafafa; }
+.presence {
+  max-width: 912px;
+  margin: 22px auto 0;
+  padding: 18px 24px 14px;
+  gap: 12px 0;
+  border: 1px solid #e2e2e2;
+  border-top: 2px solid var(--red);
+  background: #fafafa;
+  border-radius: 14px;
+}
+.presence > div { flex: 1 1 0; min-width: 0; padding-inline: 16px; gap: 2px; }
+.presence > div + div { border-inline-start: 1px solid #ddd; }
+.presence strong { font-size: 28px; font-weight: 700; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.presence span { color: #555; font-size: 13px; }
+.presence p { margin: 2px 0 0; padding-top: 10px; border-top: 1px solid #e8e8e8; color: #666; font-size: 12px; }
+.presence .online-dot { background: var(--red); }
+body:has(.hero, .detail) footer {
+  max-width: 912px;
+  padding: 18px 24px;
+  align-items: center;
+  color: #666;
+}
+body:has(.hero, .detail) footer nav { flex-wrap: wrap; gap: 4px 18px; }
+body:has(.hero, .detail) footer a { display: inline-flex; align-items: center; min-height: 44px; }
+body:has(.hero, .detail) footer a:hover { color: var(--red); text-decoration: underline; }
+@media (max-width: 960px) {
+  .presence, body:has(.hero, .detail) footer { margin-inline: 24px; }
+}
+@media (max-width: 600px) {
+  body:has(.hero) .header { padding: 12px 20px; min-height: 62px; }
+  .hero { margin-top: 16px; padding-inline: 20px; }
+  .hero h1 { font-size: clamp(30px, 8.8vw, 39px); margin-block: 6px; letter-spacing: -0.8px; }
+  .hero .intro { font-size: 14px; margin-bottom: 14px; }
+  .composer textarea { height: 92px; min-height: 92px; padding: 14px; font-size: 17px; }
+  .composer-bottom { padding: 10px 12px 12px; }
+  .composer-bottom button { min-width: 142px; padding-inline: 16px; }
+  .popular { padding-inline: 20px; margin-top: 20px; }
+  .section-heading { gap: 8px; }
+  .section-heading h2 { font-size: 17px; }
+  .section-heading > span { font-size: 11px; }
+  .cards { grid-template-columns: 1fr; gap: 14px; }
+  .stop-card { padding: 18px; }
+  .stop-text { font-size: 18px; margin: 10px 0 16px; }
+  .popular .empty { padding: 20px 16px; }
+  .presence { margin: 24px 20px 0; padding: 18px 12px 16px; gap: 12px 0; }
+  .presence > div { flex-basis: 50%; padding-inline: 8px; }
+  .presence p { font-size: 11px; }
+  body:has(.hero, .detail) footer { margin-inline: 20px; padding: 16px 0 20px; gap: 4px 16px; }
+  body:has(.hero, .detail) footer nav { justify-content: center; }
+}
+
+body:has(.hero) .header .logo { display: inline-flex; align-items: baseline; flex-shrink: 0; font-size: 28px; letter-spacing: -1.4px; }
+body:has(.hero) .header .quiet { display: inline-flex; align-items: center; min-height: 40px; font-size: 13px; line-height: 1.5; }
+.hero .eyebrow { font-size: 12px; }
+@media (min-width: 900px) {
+  .hero { max-width: 800px; }
+  .hero h1 { font-size: 40px; line-height: 1.4; letter-spacing: -1px; }
+  .hero h1 br { display: none; }
+  .hero h1 em { display: inline-block; margin-inline-start: 0.22em; }
+  .hero .composer { max-width: 640px; margin-inline: auto; }
+}
+
+.popular > .section-heading { justify-content: flex-end; }

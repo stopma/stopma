@@ -8,9 +8,6 @@ export default async function Home() {
   return (
     <>
       <section className="hero">
-        <div className="eyebrow">
-          <span /> مساحة لصوتك
-        </div>
         <h1>
           شنو بغيتي يوقف
           <br />
@@ -21,7 +18,6 @@ export default async function Home() {
       </section>
       <section className="popular">
         <div className="section-heading">
-          <h2>حوايج بغيناها توقف</h2>
           <span>
             الأكثر دعماً <span aria-hidden="true">↙</span>
           </span>
