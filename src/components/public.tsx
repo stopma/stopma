@@ -120,7 +120,7 @@ export function Vote({ id, count }: { id: string; count: number }) {
           }
         }}
       >
-        {done ? "✓ وصل صوتك" : busy ? "لحظة..." : "+ أنا حتى أنا"}
+        {done ? "✓ وصل صوتك" : busy ? "لحظة..." : "حتى أنا"}
       </button>
       {error && (
         <span role="alert" className="error vote-error">
