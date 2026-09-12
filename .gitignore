@@ -7,3 +7,6 @@ coverage/
 test-results/
 *.tsbuildinfo
 .local/
+
+.vercel
+.env*
