@@ -62,7 +62,7 @@ export async function renderStopShareImage(text: string) {
   );
   const description = await textLayer(
     '\u200f<span foreground="#666666">' +
-      escape("سلوك بغيناه يتبدّل، من أجل مغرب أحسن.") +
+      escape("شارك رأيك على") +
       "</span>",
     27,
   );
