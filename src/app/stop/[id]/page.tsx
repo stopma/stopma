@@ -1,3 +1,5 @@
+import { Comments } from "@/components/comments";
+import { readComments } from "@/lib/comments-server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { z } from "zod";
@@ -65,7 +67,7 @@ export default async function Detail({
   const { id } = await params;
   const stop = await getStop(id);
   if (!stop) notFound();
-  const [{ data: similar }, labels] = await Promise.all([
+  const [{ data: similar }, labels, comments] = await Promise.all([
     db()
       .from("stops")
       .select("*")
@@ -75,6 +77,7 @@ export default async function Detail({
       .order("votes_count", { ascending: false })
       .limit(3),
     categoryLabels(),
+    readComments(id),
   ]);
   return (
     <div className="detail">
@@ -98,6 +101,11 @@ export default async function Detail({
           }
         />
       </article>
+      <Comments
+        stopId={id}
+        comments={comments}
+        enabled={configured() && process.env.SITE_LAUNCH_READY === "true"}
+      />
       {!!similar?.length && (
         <section>
           <h2>STOP من نفس الفئة</h2>

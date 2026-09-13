@@ -1,3 +1,4 @@
+import { AdminComments } from "@/components/admin-comments";
 import { admin, configured, db } from "@/lib/server";
 import { Login, Logout, Moderate, CategoryEditor } from "@/components/admin";
 import Link from "next/link";
@@ -11,7 +12,12 @@ export const metadata = {
 export default async function Admin({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; page?: string }>;
+  searchParams: Promise<{
+    status?: string;
+    page?: string;
+    comment_status?: string;
+    comment_page?: string;
+  }>;
 }) {
   if (!configured())
     return (
@@ -114,6 +120,7 @@ export default async function Admin({
           <Link href={`/admin?status=${status}&page=${page + 1}`}>التالي</Link>
         )}
       </nav>
+      <AdminComments query={query} />
       {categoriesError ? (
         <p>تعذر تحميل الفئات.</p>
       ) : (
