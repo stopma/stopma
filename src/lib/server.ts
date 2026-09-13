@@ -107,7 +107,7 @@ export async function limit(
   if (error) throw error;
   return data === true;
 }
-export async function readStops() {
+export async function readStops(page = 1) {
   if (!configured()) return null;
   const { data, error } = await db()
     .from("stops")
@@ -115,7 +115,9 @@ export async function readStops() {
     .eq("status", "published")
     .order("votes_count", { ascending: false })
     .order("created_at", { ascending: false })
-    .limit(4);
+    .order("id", { ascending: false })
+    // Fetch one extra row to expose the next page without hiding lower-voted STOPs.
+    .range((page - 1) * 4, page * 4);
   if (error) return null;
   return data;
 }
