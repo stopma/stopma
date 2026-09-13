@@ -1,11 +1,7 @@
 import sharp from "sharp";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import {
-  shareDescription,
-  shareCallToAction,
-  stopShareTitle,
-} from "./share-metadata";
+import { shareCallToAction, stopShareTitle } from "./share-metadata";
 
 const fontfile = join(process.cwd(), "public/fonts/NotoSansArabic.ttf");
 // Explicit file read also lets Next.js trace the bundled font into server deployments.
@@ -65,7 +61,9 @@ export async function renderStopShareImage(text: string) {
     "left",
   );
   const description = await textLayer(
-    '\u200f<span foreground="#666666">' + escape(shareDescription) + "</span>",
+    '\u200f<span foreground="#666666">' +
+      escape("سلوك بغيناه يتبدّل، من أجل مغرب أحسن.") +
+      "</span>",
     27,
   );
   const footer = await textLayer(
