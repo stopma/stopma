@@ -60,12 +60,6 @@ export async function renderStopShareImage(text: string) {
     340,
     "left",
   );
-  const description = await textLayer(
-    '\u200f<span foreground="#666666">' +
-      escape("شارك رأيك على") +
-      "</span>",
-    27,
-  );
   const footer = await textLayer(
     '\u200f<span foreground="#202020" weight="bold">' +
       escape(shareCallToAction) +
@@ -82,11 +76,6 @@ export async function renderStopShareImage(text: string) {
         input: titleLayer.data,
         left: 1200 - 72 - titleLayer.info.width,
         top: 145 + Math.floor((276 - titleLayer.info.height) / 2),
-      },
-      {
-        input: description.data,
-        left: 1200 - 72 - description.info.width,
-        top: 449,
       },
       { input: footer.data, left: 1200 - 72 - footer.info.width, top: 549 },
     ])

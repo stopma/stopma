@@ -43,7 +43,7 @@ export async function generateMetadata({
       locale: "ar_MA",
       siteName: "STOP.ma",
       url,
-      title: "شارك رأيك على STOP.ma",
+      title: "سلوك بغيناه يتبدل، من أجل مغرب أحسن.",
       description: shareDescription,
       images: [
         { url: image, width: 1200, height: 630, alt: title, type: "image/png" },
