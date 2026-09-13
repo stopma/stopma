@@ -206,3 +206,13 @@ body:has(.hero) .header .quiet { display: inline-flex; align-items: center; min-
 @media (max-width: 380px) {
   .stop-actions { width: 100%; margin-inline-start: 0; }
 }
+
+.stop-sort { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.stop-sort a { display: inline-flex; align-items: center; min-height: 40px; padding: 6px 14px; border: 1px solid #ddd; border-radius: 8px; color: #555; font-size: 13px; }
+.stop-sort a[aria-current] { border-color: var(--red); color: var(--red); font-weight: 700; }
+.stop-pagination { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; margin-top: 22px; }
+.stop-pagination a, .stop-pagination > span { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; min-height: 44px; padding: 6px 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+.stop-pagination a[aria-current="page"] { color: #fff; background: var(--red); border-color: var(--red); font-weight: 700; }
+.stop-pagination [aria-disabled] { color: #999; }
+.stop-pagination .page-gap { min-width: 16px; padding-inline: 0; border: 0; }
+.stop-sort a:focus-visible, .stop-pagination a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }

@@ -120,7 +120,7 @@ try {
         .evaluateAll((links) =>
           links.map((a) => a.getAttribute("href").split("/").at(-1)),
         );
-      assert.ok(ids.length <= 4);
+      assert.ok(ids.length <= 10);
       seen.push(...ids);
       assert.ok(
         await page.evaluate(
@@ -129,7 +129,7 @@ try {
         "No horizontal overflow",
       );
       const next = page.getByRole("link", {
-        name: "المزيد من STOP",
+        name: "التالي",
         exact: true,
       });
       if (!(await next.count())) break;

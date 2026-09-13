@@ -1,3 +1,9 @@
+import {
+  PAGE_SIZE,
+  byPublication,
+  type PublicationRow,
+  type StopSort,
+} from "./stop-list";
 import "server-only";
 import { allowedOrigin } from "./origin";
 import { createClient } from "@supabase/supabase-js";
@@ -107,19 +113,57 @@ export async function limit(
   if (error) throw error;
   return data === true;
 }
-export async function readStops(page = 1) {
+export async function readStops(requestedPage = 1, sort: StopSort = "votes") {
   if (!configured()) return null;
-  const { data, error } = await db()
+  const client = db();
+  const { count, error: countError } = await client
     .from("stops")
-    .select("*")
-    .eq("status", "published")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "published");
+  if (countError) return null;
+  const totalPages = Math.max(1, Math.ceil((count ?? 0) / PAGE_SIZE));
+  const page = Math.min(Math.max(1, requestedPage), totalPages);
+  let query = client.from("stops").select("*").eq("status", "published");
+  if (sort === "newest") {
+    // There is no published_at column. Read the first recorded approval;
+    // old approvals removed by retention fall back to submission time.
+    const index: PublicationRow[] = [];
+    for (let offset = 0; ; offset += 1000) {
+      const { data, error } = await client
+        .from("stops")
+        .select("id,created_at,moderation_log(created_at)")
+        .eq("status", "published")
+        .eq("moderation_log.action", "published")
+        .order("id")
+        .order("created_at", {
+          referencedTable: "moderation_log",
+          ascending: true,
+        })
+        .limit(1, { referencedTable: "moderation_log" })
+        .range(offset, offset + 999);
+      if (error) return null;
+      index.push(...data);
+      if (data.length < 1000) break;
+    }
+    const ids = index
+      .sort(byPublication)
+      .slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+      .map((row) => row.id);
+    if (!ids.length) return { stops: [], page, totalPages };
+    const { data, error } = await query.in("id", ids);
+    if (error) return null;
+    return {
+      stops: data.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id)),
+      page,
+      totalPages,
+    };
+  }
+  const { data, error } = await query
     .order("votes_count", { ascending: false })
     .order("created_at", { ascending: false })
     .order("id", { ascending: false })
-    // Fetch one extra row to expose the next page without hiding lower-voted STOPs.
-    .range((page - 1) * 4, page * 4);
-  if (error) return null;
-  return data;
+    .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+  return error ? null : { stops: data, page, totalPages };
 }
 export async function categoryLabels() {
   if (!configured()) return {};
