@@ -1,7 +1,9 @@
 "use client";
 import { useId, useRef, useState } from "react";
+import { stopShareTitle } from "@/lib/share-metadata";
 
 export function Share({ text, url }: { text: string; url: string }) {
+  text = stopShareTitle(text);
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const input = useRef<HTMLInputElement>(null);

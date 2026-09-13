@@ -5,6 +5,7 @@ import { db, configured, categoryLabels } from "@/lib/server";
 import { Vote, Presence } from "@/components/public";
 import { StopCard } from "@/components/stop-card";
 import { categories } from "@/lib/content";
+import { stopShareTitle, shareDescription } from "@/lib/share-metadata";
 export const dynamic = "force-dynamic";
 async function getStop(id: string) {
   if (!configured() || !z.uuid().safeParse(id).success) return null;
@@ -28,24 +29,30 @@ export async function generateMetadata({
     "/stop/" + id,
     process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   ).href;
-  const image = new URL("/opengraph-image", url).href;
+  const title = stopShareTitle(stop.text);
+  const image = new URL(
+    `/stop/${id}/share-image?v=${encodeURIComponent(stop.updated_at)}`,
+    url,
+  ).href;
   return {
-    title: stop?.text?.slice(0, 70) || "STOP غير موجود",
-    description: stop?.text,
+    title: { absolute: title },
+    description: shareDescription,
     alternates: { canonical: "/stop/" + id },
     openGraph: {
       type: "article",
       locale: "ar_MA",
       siteName: "STOP.ma",
       url,
-      title: stop.text,
-      description: stop.text,
-      images: [{ url: image, width: 1200, height: 630, alt: "STOP.ma" }],
+      title,
+      description: shareDescription,
+      images: [
+        { url: image, width: 1200, height: 630, alt: title, type: "image/png" },
+      ],
     },
     twitter: {
       card: "summary_large_image",
-      title: stop.text,
-      description: stop.text,
+      title,
+      description: shareDescription,
       images: [image],
     },
   };
