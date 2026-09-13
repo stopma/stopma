@@ -1,4 +1,5 @@
 import "server-only";
+import { allowedOrigin } from "./origin";
 import { createClient } from "@supabase/supabase-js";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
@@ -78,11 +79,11 @@ export async function visitor() {
   return { id: hash("visitor:" + id), fresh: true };
 }
 export function sameOrigin(req: NextRequest) {
-  const origin = req.headers.get("origin");
-  const expected = new URL(
+  return allowedOrigin(
+    req.headers.get("origin"),
     process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-  ).origin;
-  return origin === expected;
+    process.env.ALLOWED_ORIGINS,
+  );
 }
 export async function limit(
   req: NextRequest,
