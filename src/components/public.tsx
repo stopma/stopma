@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { number } from "@/lib/content";
+import { Share } from "./share";
 export async function post(action: string, body: object) {
   const response = await fetch("/api/" + action, {
     method: "POST",
@@ -89,7 +90,17 @@ export function Submit({ enabled }: { enabled: boolean }) {
     </form>
   );
 }
-export function Vote({ id, count }: { id: string; count: number }) {
+export function Vote({
+  id,
+  count,
+  text,
+  url,
+}: {
+  id: string;
+  count: number;
+  text: string;
+  url: string;
+}) {
   const router = useRouter();
   const [votes, setVotes] = useState(count),
     [done, setDone] = useState(false),
@@ -101,27 +112,35 @@ export function Vote({ id, count }: { id: string; count: number }) {
       <span className="support">
         <strong>{number(votes)}</strong> مؤيد
       </span>
-      <button
-        className="vote"
-        disabled={busy || done}
-        aria-pressed={done}
-        onClick={async () => {
-          setBusy(true);
-          setError("");
-          try {
-            const data = await post("vote", { id });
-            setVotes(data.count);
-            setDone(true);
-            router.refresh();
-          } catch (e) {
-            setError((e as Error).message);
-          } finally {
-            setBusy(false);
-          }
-        }}
-      >
-        {done ? "✓ وصل صوتك" : busy ? "لحظة..." : "حتى أنا"}
-      </button>
+      <div className="stop-actions">
+        <button
+          className="vote"
+          disabled={busy || done}
+          aria-pressed={done}
+          onClick={async () => {
+            setBusy(true);
+            setError("");
+            try {
+              const data = await post("vote", { id });
+              setVotes(data.count);
+              setDone(true);
+              router.refresh();
+            } catch (e) {
+              setError((e as Error).message);
+            } finally {
+              setBusy(false);
+            }
+          }}
+        >
+          {done ? "✓ وصل صوتك" : busy ? "لحظة..." : "حتى أنا"}
+        </button>
+        <Share text={text} url={url} />
+      </div>
+      {done && (
+        <p className="share-prompt" role="status">
+          متافق؟ شاركها مع الآخرين.
+        </p>
+      )}
       {error && (
         <span role="alert" className="error vote-error">
           {error}
@@ -175,35 +194,5 @@ export function Presence({ enabled }: { enabled: boolean }) {
           : "الإحصائيات غير متاحة حالياً"}
       </p>
     </section>
-  );
-}
-export function Share({ text }: { text: string }) {
-  const [message, setMessage] = useState("");
-  return (
-    <>
-      <button
-        className="secondary"
-        onClick={async () => {
-          try {
-            if (navigator.share)
-              await navigator.share({
-                title: "STOP.ma",
-                text,
-                url: location.href,
-              });
-            else {
-              await navigator.clipboard.writeText(location.href);
-              setMessage("تنسخ الرابط.");
-            }
-          } catch (e) {
-            if ((e as Error).name !== "AbortError")
-              setMessage("تعذر النسخ. تقدر تنسخ الرابط من المتصفح.");
-          }
-        }}
-      >
-        مشاركة ↗
-      </button>
-      <span role="status">{message}</span>
-    </>
   );
 }

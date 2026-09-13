@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { z } from "zod";
 import { db, configured, categoryLabels } from "@/lib/server";
-import { Vote, Share, Presence } from "@/components/public";
+import { Vote, Presence } from "@/components/public";
 import { StopCard } from "@/components/stop-card";
 import { categories } from "@/lib/content";
 export const dynamic = "force-dynamic";
@@ -24,10 +24,30 @@ export async function generateMetadata({
   const { id } = await params;
   const stop = await getStop(id);
   if (!stop) notFound();
+  const url = new URL(
+    "/stop/" + id,
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  ).href;
+  const image = new URL("/opengraph-image", url).href;
   return {
     title: stop?.text?.slice(0, 70) || "STOP غير موجود",
     description: stop?.text,
     alternates: { canonical: "/stop/" + id },
+    openGraph: {
+      type: "article",
+      locale: "ar_MA",
+      siteName: "STOP.ma",
+      url,
+      title: stop.text,
+      description: stop.text,
+      images: [{ url: image, width: 1200, height: 630, alt: "STOP.ma" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: stop.text,
+      description: stop.text,
+      images: [image],
+    },
   };
 }
 export default async function Detail({
@@ -59,8 +79,17 @@ export default async function Detail({
           {labels[stop.category] || categories[stop.category]}
         </span>
         <h1>{stop.text}</h1>
-        <Vote id={id} count={stop.votes_count} />
-        <Share text={stop.text} />
+        <Vote
+          id={id}
+          count={stop.votes_count}
+          text={stop.text}
+          url={
+            new URL(
+              "/stop/" + id,
+              process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+            ).href
+          }
+        />
       </article>
       {!!similar?.length && (
         <section>
